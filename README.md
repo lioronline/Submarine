@@ -1,5 +1,5 @@
 # Cognitive Robotics Project - Kaitei Takara Sagashi
-Lior Avrams, Bar Hacohen, Michael Rosenblum, and Roy Waisbord
+Michael Rosenblum, Bar Hacohen, Lior Avrams, and Roy Waisbord
 
 # Introduction 
 
