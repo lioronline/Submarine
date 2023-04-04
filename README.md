@@ -20,9 +20,11 @@ If the user has “pip” installed, running the following command in the termin
 '''
 pip install numpy matplotlib pygame
 '''
+
 # Usage 
 
 To run this project, download the .zip file and extract the folder. Navigate to this folder in the command line and run the following command: 
 
-
+'''
 python3 main.py
+'''
