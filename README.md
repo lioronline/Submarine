@@ -29,5 +29,5 @@ python3 main.py
 
 
 <div align="center">
-  <img src="path/to/background/photo" />
+  <img src="Submarine/blob/main/sub_photo.jpg" />
 </div>
