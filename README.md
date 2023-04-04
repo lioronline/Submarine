@@ -5,7 +5,7 @@ Lior Avrams, Bar Hacohen, Michael Rosenblum, and Roy Waisbord
 
 This project simulates a game with a submarine agent in an underwater environment, whose task is to find treasures and return them to a boat on the surface. The solution to this game is a compound implementation of a searching algorithm we created and an MDP solving algorithm, policy iteration. Its purpose is to showcase a possible approach to solving a POMDP problem by reducing it first to an MDP, then using the simpler and less computationally expensive solution. 
 
-Remark: For a map with two-three treasures, the solution may take up to 20 seconds to solve the problem after seeing the treasure (patience is needed since it’s not the most efficient solution) 
+*Remark* : For a map with two-three treasures, the solution may take up to 20 seconds to solve the problem after seeing the treasure (patience is needed since it’s not the most efficient solution) 
 
 # Installation/Setup 
 
