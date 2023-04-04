@@ -29,5 +29,5 @@ python3 main.py
 
 
 <div align="center">
-  <img src="Submarine/blob/main/sub_photo.jpg" />
+  <img src="sub_photo.jpg" />
 </div>
