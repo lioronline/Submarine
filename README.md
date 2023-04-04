@@ -28,6 +28,6 @@ python3 main.py
 ```
 
 
-<div align="center">
-  <img src="sub_photo.jpg" />
+<div style="background-image: url('https://https://github.com/lioronline/Submarine/blob/main/sub_photo.jpg'); height: 500px; background-size: cover;">
 </div>
+
