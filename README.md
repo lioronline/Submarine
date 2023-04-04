@@ -10,23 +10,18 @@ This project simulates a game with a submarine agent in an underwater environmen
 # Installation/Setup 
 
 The user should have numpy, matplotlib, and pygame installed. 
-
 For this project we used the “Pygame” library to animate the problem. The library can be downloaded from the Visual Studio extensions tab and is required to run the code properly.  
-
 If the user has “pip” installed, running the following command in the terminal will solve any dependency issues: 
-
 ```
 pip install numpy matplotlib pygame 
 ```
-
 # Usage 
 
 To run this project, download the .zip file and extract the folder. Navigate to this folder in the command line and run the following command: 
-
 ```
 python3 main.py
 ```
 
-<div style="background-image: url('https://github.com/lioronline/Submarine/blob/main/sub_photo.jpg'); height: 500px; background-size: cover;">
-</div>
-
+<body style="background-image: url('https://github.com/lioronline/Submarine/blob/main/sub_photo.jpg'); background-repeat: no-repeat; background-size: cover;">
+    <!-- Your content goes here -->
+</body>
