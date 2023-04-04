@@ -27,8 +27,6 @@ To run this project, download the .zip file and extract the folder. Navigate to 
 python3 main.py
 ```
 
-
-<body style="background-image: url('https://github.com/lioronline/Submarine/blob/main/sub_photo.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
-    <!-- Your content goes here -->
-</body>
+<div style="background-image: url('https://github.com/lioronline/Submarine/blob/main/sub_photo.jpg'); height: 500px; background-size: cover;">
+</div>
 
