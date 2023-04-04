@@ -26,9 +26,10 @@ To run this project, download the .zip file and extract the folder. Navigate to 
 ```
 python3 main.py
 ```
-![Alt text](/path/to/image.jpg)
+
+![Alt text](/path/to/sub_photo.jpg)
 body {
-    background-image: url('/path/to/image.jpg');
+    background-image: url('/path/to/sub_photo.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
