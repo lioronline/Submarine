@@ -28,6 +28,6 @@ python3 main.py
 ```
 
 
-<div style="background-image: url('https://https://github.com/lioronline/Submarine/blob/main/sub_photo.jpg'); height: 500px; background-size: cover;">
-</div>
-
+<body style="background-image: url('https://github.com/lioronline/Submarine/blob/main/sub_photo.jpg'); background-repeat: no-repeat; background-size: cover;">
+    <!-- Your content goes here -->
+</body>
