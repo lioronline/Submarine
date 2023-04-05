@@ -17,10 +17,14 @@ pip install numpy matplotlib pygame
 ```
 # Usage 
 
-To run this project, download the .zip file and extract the folder. Navigate to this folder in the command line and run the following command: 
+To run this project, download the .zip file and extract the folder. Navigate to the Final_project folder in the command line and run the following command: 
 ```
 python3 main.py
 ```
+#Extra
+
+To see how the POMCP algorithm runs, navigate to the pomcp_attempt folder and run the same command as seen above:
+
 <div align="center">
   <img src="sub_photo.jpg" />
 </div>
