@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pygame
 import math
 import random
+
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
@@ -35,10 +36,6 @@ success_sound = pygame.mixer.Sound("success.wav")
 M = mapgrid.shape[0]
 N = mapgrid.shape[1]
 
-# Defining end message
-end_image = pygame.image.load('end.png')
-end_image = pygame.transform.scale(end_image, (N * 50, M * 50))
-
 # Locations
 boat_index = np.where(arr == 6)
 sub_x, sub_y = (boat_index[0][0], boat_index[1][0])
@@ -58,11 +55,11 @@ action_to_move = {
         'right': (0, 1),
     }
 
-# Define the range of rows and columns that the sub can observe
+# Define the range of rows and columns that the submarine agent can observe
 row_range = range(max(sub_x-1, 0), min(sub_x+1, len(arr)-1)+1)
 col_range = range(max(sub_y-1, 0), min(sub_y+1, len(arr[0])-1)+1)
 
-#observable map
+#Observable map
 obs_map = np.copy(arr)
 arr[sub_x][sub_y] = 1 #so arr represents the map without the boat
 for i in range(M):
@@ -70,7 +67,7 @@ for i in range(M):
         if i not in row_range or j not in col_range:
             obs_map[i][j] = 9 #9 represents unknown spot
             
-# Observed 0bstacle locations
+# Observed obstacle locations
 obstacles_index = np.where((obs_map == 3)| (obs_map == 4) | (obs_map == 5))
 obstacles = {}
 for i in range(len(obstacles_index[0])):
@@ -78,7 +75,7 @@ for i in range(len(obstacles_index[0])):
     obstacles[i] = index
 obstacle_values = obstacles.values()
 
-#uptates the observable map
+#Updates the observable map
 def update_obs_map(action, arr, obs_map, sub_x, sub_y,M,N):
         row_range = range(max(sub_x-1, 0), min(sub_x+1, len(arr)-1)+1)
         col_range = range(max(sub_y-1, 0), min(sub_y+1, len(arr[0])-1)+1)
@@ -144,7 +141,7 @@ def in_map(x, y):
         return True
     return False
 
-# Checks if a cell is serounded by obstacles so that the find_closest_unknown knows not to search there
+# Checks if a cell is surrounded by obstacles so that the find_closest_unknown knows not to search there
 def check_neighbors(obs_map, i, j):
     neighbors = [(i-1,j), (i+1,j), (i,j-1), (i,j+1)]
     for n in neighbors:
@@ -156,8 +153,8 @@ def check_neighbors(obs_map, i, j):
             return False
     return True
 
+#Searches for the action that will most greatly reduce the distance between the submarine and the closest unknown cell
 def find_closest_unknown(obs_map, sub_x, sub_y):
-    #searches for the action that will make the distatnce between the sub and the closest unknown cell the smallest
     closest_nine_dist = float('inf')
     closest_nine_dir = None
     for i in range(M):
@@ -166,7 +163,7 @@ def find_closest_unknown(obs_map, sub_x, sub_y):
                 dist = abs(i - sub_x) + abs(j - sub_y)
                 if dist < closest_nine_dist:
                     closest_nine_dist = dist
-                    if not check_neighbors(obs_map, i, j): # if the cell has neighbors that are not obstacles or unknows so that it doesnt get stuck
+                    if not check_neighbors(obs_map, i, j): # if the cell has neighbors that are not obstacles or unknown cells so that it doesnt get stuck
                         for action in action_to_move:
                             new_x = sub_x + action_to_move[action][0]
                             new_y = sub_y + action_to_move[action][1]
@@ -174,7 +171,7 @@ def find_closest_unknown(obs_map, sub_x, sub_y):
                                 if distance_to_location(new_x,new_y,(i,j)) < distance_to_location(sub_x,sub_y,(i,j)):
                                     closest_nine_dir = action
     if closest_nine_dir == None:
-        return random.choice(legal_actions(state, obstacle_values)) # if there is no action that will make it closer to an unknown cell then it gets a random action (doesnt work so well)
+        return random.choice(legal_actions(state, obstacle_values)) # if there is no action that will make it closer to an unknown cell then it gets a random action (doesn't work so well)
     else:
         return closest_nine_dir
 
@@ -355,7 +352,7 @@ def reward(state, action):
         if action == 'pickup' and (x, y) in obs_treasure.values() and t1 == 0:
             return small_reward
         elif action == 'return' and (x, y) == (initial_x, initial_y) and t1 == 1:
-            return large_reward
+            return 2 * large_reward
         elif (x,y,t1) == (next_x,next_y,next_t1) and not t1 == 2:
             return -1 * large_reward
         return -0.1
@@ -367,7 +364,7 @@ def reward(state, action):
         elif action == 'pickup' and (x, y) in obs_treasure.values() and t2 == 0 and t1 != 1:
             return small_reward
         elif action == 'return' and (x, y) == (initial_x, initial_y) and (t1 == 1 or t2 == 1):
-            return large_reward
+            return 2 * large_reward
         elif (x,y,t1,t2) == (next_x,next_y,next_t1,next_t2) and not (t1 == 2 and t2 == 2):
             return -1 * large_reward
         return -0.1
@@ -381,13 +378,12 @@ def reward(state, action):
         elif action == 'pickup' and (x, y) in obs_treasure.values() and t3 == 0 and t1 != 1 and t2 != 1:
             return small_reward
         elif action == 'return' and (x, y) == (initial_x, initial_y) and (t1 == 1 or t2 == 1 or t3 == 1):
-            return large_reward
+            return 2 * large_reward
         elif (x,y,t1,t2,t3) == (next_x,next_y,next_t1,next_t2,next_t3) and not (t1 == 2 and t2 == 2 and t3 == 2):
             return -1 * large_reward
         return -0.1
  
- # Modified Transition function
-
+# Modified Transition function
 def next_state(state, action):
     x = state[0]
     y = state[1]
@@ -406,7 +402,7 @@ def next_state(state, action):
     
     t1 = state[2]
 
-    if treasure_length ==1:
+    if treasure_length == 1:
         if action == 'pickup' and (x,y) in obs_treasure.values() and t1 == 0:
             t1 = 1
         elif action == 'return' and (x,y) == (initial_x, initial_y) and t1 == 1:
@@ -538,7 +534,7 @@ def execute_policy(optimal_policy, initial_state, num_treasures_left):
             pickup_sound.play()
             pickup_sound.set_volume(1)
         if action == 'pickup':  # Deletes treasure from map
-            arr[x][y] = 0 # delets the treasure from the "real map"
+            arr[x][y] = 0 # deletes the treasure from the "real map"
             num_treasures_left -= 1
         update_obs_map(action, arr, obs_map, sub_x, sub_y,M,N)
         draw_map(screen, obs_map)
@@ -580,18 +576,12 @@ game_sound.set_volume(0.2)
 
 
 treasure_options = [0, 1, 2] # these are the value that the treasure information in the state can take
+# 0 means the treasure has not yet been picked up, 1 means the treasure is being held, 2 means the treasure has been returned
 num_runs = len(treasure_index[0]) # the amout of treasure to find
 for i in range(num_runs):
     treasure_index = np.where(arr == 2) #checks the amout of treasure left in the map so that after a treasure has been returned we can work with a smaller state space for the MDP
     treasure_length = len(treasure_index[0]) 
     actions_taken = []
-
-    if treasure_length ==1:
-        state_space = [(x, y, t1) for x in range(M) for y in range(N) for t1 in treasure_options]
-    elif treasure_length == 2:
-            state_space = [(x, y, t1, t2) for x in range(M) for y in range(N) for t1 in treasure_options for t2 in treasure_options if not (t1 == 1 and t2 == 1)]
-    elif treasure_length == 3:
-            state_space = [(x, y, t1, t2, t3) for x in range(M) for y in range(N) for t1 in treasure_options for t2 in treasure_options for t3 in treasure_options if not (t1 == 1 and t2 == 1) if not (t1 == 1 and t3 == 1) if not (t2 ==1 and t3 == 1)]
     
     if len(treasure_index[0]) == 1:
         state = (sub_x, sub_y, 0)  # start state
@@ -602,7 +592,7 @@ for i in range(num_runs):
     #treasure search
     while num_treasures_left==0:
         action = next_step(row_range,col_range,obs_map,M,N,previous_step)
-        if action == None: # not really used now because the functions return a random action if None but cvan be an option to get out of being stuck
+        if action == None: # not really used now because the functions return a random action if None but can be an option to get out of being stuck
             return_to_boat(actions_taken)
             actions_taken = []
         else:
@@ -629,23 +619,37 @@ for i in range(num_runs):
     elif len(treasure_index[0]) == 2:
         state = (sub_x, sub_y, 0, 0)  # start state
     elif len(treasure_index[0]) == 3:
-        state = (sub_x, sub_y, 0, 0, 0)
+        state = (sub_x, sub_y, 0, 0, 0) # start state
 
-    # find obsereved treasure indexs
+    # Find obsereved treasure indicies
     obs_treasure = {}
     for i in range(len(obs_treasure_index[0])):
         index = (obs_treasure_index[0][i], obs_treasure_index[1][i])
         obs_treasure[i] = index
 
     # Obstacle locations
-    obstacles_index = np.where((obs_map == 3) |(obs_map == 4) | (obs_map == 5) | (obs_map == 9))
+    obstacles_index = np.where((obs_map == 3) |(obs_map == 4) | (obs_map == 5) | (obs_map == 9)) # Here the list of obsticals includes undiscovered cells
     obstacles = {}
     for i in range(len(obstacles_index[0])):
         index = (obstacles_index[0][i], obstacles_index[1][i])
         obstacles[i] = index
     obstacle_values = obstacles.values()
 
-    #retrieve treasure
+    if treasure_length ==1:
+        full_state_space = [(x, y, t1) for x in range(M) for y in range(N) for t1 in treasure_options]
+    elif treasure_length == 2:
+            full_state_space = [(x, y, t1, t2) for x in range(M) for y in range(N) for t1 in treasure_options for t2 in treasure_options if not (t1 == 1 and t2 == 1)]
+    elif treasure_length == 3:
+            full_state_space = [(x, y, t1, t2, t3) for x in range(M) for y in range(N) for t1 in treasure_options for t2 in treasure_options for t3 in treasure_options if not (t1 == 1 and t2 == 1) if not (t1 == 1 and t3 == 1) if not (t2 ==1 and t3 == 1)]
+    
+    state_space = []
+    for temp_state in full_state_space: # Deleteing all obstacle cells from the state space since the agent will never be in that state
+        x = temp_state[0]
+        y = temp_state[1]
+        if (x, y) not in  obstacle_values:
+            state_space.append(temp_state)
+
+    # Retrieve treasure
     optimal_policy, optimal_values = policy_iteration(obstacle_values)
     plan, total_reward, state, num_treasures_left = execute_policy(optimal_policy, state, num_treasures_left)
     sub_x = state[0]
@@ -653,9 +657,11 @@ for i in range(num_runs):
     previous_step = 'return'
 
 # Visualizing end screen with pygame
+end_image = pygame.image.load('end.png')
+end_image = pygame.transform.scale(end_image, (12 * 50, 10 * 50))
 waves_sound.fadeout(2000)
 game_sound.fadeout(2000)
-size = (N * 50, M * 50)
+size = (12 * 50, 10 * 50)
 screen = pygame.display.set_mode(size)
 success_sound.set_volume(50)
 success_sound.play()
